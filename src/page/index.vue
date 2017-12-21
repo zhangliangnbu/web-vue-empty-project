@@ -1,54 +1,36 @@
 <template>
   <div>
     index page
-    <!--<div>-->
-      <!--<p v-for="item in displayList">-->
-        <!--Line:-->
-        <!--<span v-text="item"></span>-->
-      <!--</p>-->
-      <!--<infinite-loading @infinite="infiniteHandler">-->
-        <!--<span slot="no-more">-->
-        <!--There is no more News :(-->
-        <!--</span>-->
-      <!--</infinite-loading>-->
-    <!--</div>-->
+    {{list}}
   </div>
 </template>
 
 <script>
-  import InfiniteLoading from 'vue-infinite-loading'
-
   export default {
-    components: {
-      InfiniteLoading
-    },
+
     created () {
-      this.$api.get('topics', null, r => {
-        console.log(r)
-      })
+      // this.$api.get('topics', null, r => {
+      //   // console.log(r)
+      // })
+      this.$psapi.get('topics', null)
+        .then(value => {
+          console.log('success', value)
+        }, fv => {
+          console.log('fail', fv)
+        })
       for (let i = 0; i < 73; i++) {
         this.list.push(i)
       }
+      // this.timeout(1000).then(value => {
+      //   console.log(value)
+      // })
     },
     data () {
       return {
-        list: [],
-        displayList: [],
-        count: 30
+        list: []
       }
     },
     methods: {
-      infiniteHandler ($state) {
-        setTimeout(() => {
-          let temp = this.list.splice(0, this.count)
-          if (temp.length) {
-            this.displayList = this.displayList.concat(temp)
-            $state.loaded()
-          } else {
-            $state.complete()
-          }
-        }, 2000)
-      }
     }
   }
 </script>
